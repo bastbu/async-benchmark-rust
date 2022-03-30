@@ -9,8 +9,18 @@ edition = "2021"
 name = "server"
 path = "./src/server/main.rs"
 
-[[bin]]
-name = "client"
-path = "./src/client/main.rs"
+[[bench]]
+name = "bench"
+path = "./src/bench/main.rs"
+harness = false
 
 [dependencies]
+tonic = "0.6.2"
+prost = "0.9"
+prost-types = "0.9"
+tokio = { version = "1.0", features = ["rt-multi-thread"] }
+futures = "0.3"
+criterion = { version = "0.3", features = ["async", "async_tokio"] }
+
+[build-dependencies]
+tonic-build = "0.6.2"

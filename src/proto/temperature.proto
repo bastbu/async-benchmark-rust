@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package temperature;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+service TemperatureService {
+    rpc SetTemperature (RequestedTemperature) returns (google.protobuf.Empty);
+}
+
+message RequestedTemperature {
+    double value = 1;
+}
+
+message ReportedTemperature {
+    double value = 1;
+    google.protobuf.Timestamp timestamp = 2;
+}
