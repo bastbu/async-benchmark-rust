@@ -28,6 +28,26 @@ fn criterion_benchmark(c: &mut Criterion) {
     }
 
     group.finish();
+
+    let mut group = c.benchmark_group("grpc_channels");
+
+    for number_of_calls in [100, 200, 500] {
+        group.bench_with_input(
+            BenchmarkId::from_parameter(number_of_calls),
+            &number_of_calls,
+            |b, &n_calls| {
+                b.to_async(tokio::runtime::Runtime::new().unwrap())
+                    .iter(|| async {
+                        let mut clients = Vec::new();
+                        for _ in 0..n_calls {
+                            clients.push(create_grpc_client().await);
+                        }
+                    })
+            },
+        );
+    }
+
+    group.finish();
 }
 
 async fn create_grpc_client() -> TemperatureServiceClient<tonic::transport::Channel> {

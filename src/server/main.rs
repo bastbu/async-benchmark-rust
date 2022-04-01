@@ -1,3 +1,4 @@
+use std::time::Duration;
 use temperature::temperature_service_server::{TemperatureService, TemperatureServiceServer};
 use tonic::transport::Server;
 
@@ -10,7 +11,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let addr = "0.0.0.0:5000".parse()?;
 
     let svc = TemperatureServiceServer::new(TemperatureServiceImpl {});
-    Server::builder().add_service(svc).serve(addr).await?;
+    tokio::time::timeout(Duration::from_secs(60), Server::builder().add_service(svc).serve(addr)).await;
 
     Ok(())
 }
